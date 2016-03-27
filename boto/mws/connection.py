@@ -53,6 +53,7 @@ api_version_path = {
                           '/Subscriptions/2013-07-01'),
     'OffAmazonPayments': ('2013-01-01', 'SellerId',
                           '/OffAmazonPayments/2013-01-01'),
+    'Financials':        ('2015-05-01', 'SellerId', '/Finances/2015-05-01'),
 }
 content_md5 = lambda c: encodebytes(hashlib.md5(c).digest()).strip()
 decorated_attrs = ('action', 'response', 'section',
@@ -744,6 +745,13 @@ class MWSConnection(AWSQueryConnection):
     @structured_lists('AmazonOrderId.Id')
     @api_action('Orders', 6, 60)
     def get_order(self, request, response, **kw):
+        """Returns an order for each AmazonOrderId that you specify.
+        """
+        return self._post_request(request, kw, response)
+
+    @requires(['PostedAfter'])
+    @api_action('Financials', 30, 2)
+    def list_financial_events(self, request, response, **kw):
         """Returns an order for each AmazonOrderId that you specify.
         """
         return self._post_request(request, kw, response)
