@@ -750,7 +750,9 @@ class MWSConnection(AWSQueryConnection):
         return self._post_request(request, kw, response)
 
     @requires(['PostedAfter'])
-    @api_action('Financials', 30, 2)
+    @structured_objects('ChargeComponent', 'FeeComponent',
+                        'ShipmentEvent')
+    @api_action('Financials', 100, 0.5)
     def list_financial_events(self, request, response, **kw):
         """Returns an order for each AmazonOrderId that you specify.
         """
