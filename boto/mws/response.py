@@ -652,7 +652,7 @@ class FinancialEvent(ResponseElement):
                         ChargeComponent=Element(
                             ChargeAmount=Element(ComplexMoney)
                         )
-                    )
+                    ),
                     ItemFeeList=ElementList(
                         FeeComponent=Element(
                             FeeAmount=Element(ComplexMoney)
