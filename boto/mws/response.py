@@ -639,9 +639,33 @@ class Order(ResponseElement):
     )
 
 
+
 class ListOrdersResult(ResponseElement):
     Orders = Element(Order=ElementList(Order))
 
+class FinancialEvent(ResponseElement):
+    ShipmentEventList = ElementList(
+        ShipmentEvent=Element(
+            ShipmentItemList=ElementList(
+                ShipmentItem=Element(
+                    ItemChargeList=ElementList(
+                        ChargeComponent=Element(
+                            ChargeAmount=Element(ComplexMoney)
+                        )
+                    )
+                    ItemFeeList=ElementList(
+                        FeeComponent=Element(
+                            FeeAmount=Element(ComplexMoney)
+                        )
+                    )
+                )
+            )
+        )
+    )
+
+
+class ListFinancialEventsResult (ResponseElement):
+    FinancialEvents = Element(FinancialEvent=ElementList(FinancialEvent))
 
 class GetOrderResult(ListOrdersResult):
     pass
