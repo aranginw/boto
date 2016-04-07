@@ -18,6 +18,7 @@
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
+import pdb
 import xml.sax
 import hashlib
 import string
@@ -298,7 +299,7 @@ class MWSConnection(AWSQueryConnection):
     def _required_auth_capability(self):
         return ['mws']
 
-    def _post_request(self, request, params, parser, body='', headers=None):
+    def _post_request(self, request, params, parser, body='', headers=None, return_raw=False):
         """Make a POST request, optionally with a content body,
            and return the response, optionally as raw text.
         """
@@ -326,6 +327,9 @@ class MWSConnection(AWSQueryConnection):
         if digest is not None:
             assert content_md5(body) == digest
         contenttype = response.getheader('Content-Type')
+
+        if params.get('return_raw'):
+            return body
         return self._parse_response(parser, contenttype, body)
 
     def _parse_response(self, parser, contenttype, body):
@@ -750,10 +754,20 @@ class MWSConnection(AWSQueryConnection):
         return self._post_request(request, kw, response)
 
     @requires(['PostedAfter'])
-    @structured_objects('ShipmentEvent', )
-    @api_action('Financials', 100, 0.5)
+    @structured_objects('ShipmentEventList', )
+    @api_action('Financials', 100, 60)
     def list_financial_events(self, request, response, **kw):
         """Returns an order for each AmazonOrderId that you specify.
+        """
+        return self._post_request(request, kw, response)
+
+    @requires(['NextToken'])
+    @structured_objects('ShipmentEventList', )
+    @api_action('Financials', 100, 60)
+    def list_financial_events_by_next_token(self, request, response, **kw):
+        """Returns the next page of orders using the NextToken value
+           that was returned by your previous request to either
+           ListOrders or ListOrdersByNextToken.
         """
         return self._post_request(request, kw, response)
 

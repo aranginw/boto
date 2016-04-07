@@ -16,6 +16,7 @@
 # AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
 # ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+import pdb
 from decimal import Decimal
 from boto.compat import filter, map
 
@@ -644,29 +645,24 @@ class ListOrdersResult(ResponseElement):
     Orders = Element(Order=ElementList(Order))
 
 class FinancialEvent(ResponseElement):
-    ItemFeeList=ElementList(
-        FeeComponent=Element(
-            FeeAmount=Element(ComplexMoney)
+    ShipmentEventList = ElementList(
+        ShipmentEvent=Element(
+            ShipmentItemList=ElementList(
+                ShipmentItem=Element(
+                    ItemChargeList=ElementList(
+                        ChargeComponent=Element(
+                            ChargeAmount=Element(ComplexMoney)
+                        )
+                    ),
+                    ItemFeeList=ElementList(
+                        FeeComponent=Element(
+                            FeeAmount=Element(ComplexMoney)
+                        )
+                    )
+                )
+            )
         )
     )
-#    ShipmentEventList = ElementList(
-#        ShipmentEvent=Element(
-#            ShipmentItemList=ElementList(
-#                ShipmentItem=Element(
-#                    ItemChargeList=ElementList(
-#                        ChargeComponent=Element(
-#                            ChargeAmount=Element(ComplexMoney)
-#                        )
-#                    ),
-#                    ItemFeeList=ElementList(
-#                        FeeComponent=Element(
-#                            FeeAmount=Element(ComplexMoney)
-#                        )
-#                    )
-#                )
-#            )
-#        )
-#    )
 
 
 class ListFinancialEventsResult (ResponseElement):
